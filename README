@@ -1,0 +1,55 @@
+= ec2-usage-report
+
+== Description
+
+ec2-usage-report is a library for acquiring usage report of EC2.
+
+== Source Code
+
+https://bitbucket.org/winebarrel/ec2-usage-report
+
+== Install
+
+gem install ec2-usage-report
+
+== Example
+
+  require 'ec2-usage-report'
+  require 'yaml'
+  
+  EMAIL_ADDREDD  = 'sgwr_dts@yahoo.co.jp'
+  PASSWORD       = '...'
+  
+  today = Time.now
+  _3_days_ago = today - (24 * 60 * 60) * 3
+  
+  ec2_usage_report = EC2UsageReport.new(EMAIL_ADDREDD, PASSWORD)
+  
+  rows = ec2_usage_report.fetch(:start => _3_days_ago, :end => today, :periodType => :days, :operation => 'RunInstances')
+  
+  puts YAML.dump(rows)
+  
+  # (output example)
+  # --- 
+  # - - Service
+  #   - Operation
+  #   - UsageType
+  #   - Resource
+  #   - StartTime
+  #   - EndTime
+  #   - UsageValue
+  # - - AmazonEC2
+  #   - RunInstances
+  #   - DataTransfer-In-Bytes
+  #   - ""
+  #   - 12/11/12 00:00:00
+  #   - 12/12/12 00:00:00
+  #   - "405550"
+  # - - AmazonEC2
+  #   - RunInstances
+  #   - DataTransfer-Out-Bytes
+  #   - ""
+  #   - 12/11/12 00:00:00
+  #   - 12/12/12 00:00:00
+  #   - "737666"
+  # ...
